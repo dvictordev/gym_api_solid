@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  api-solid-pg:
+    container_name: api-solid-p
+    image: bitnami/postgresql
+    restart: always
+    environment:
+      POSTGRESQL_USERNAME: solid
+      POSTGRESQL_PASSWORD: solid
+      POSTGRESQL_DATABASE: apisolid
+    ports:
+      - "5432:5432"
+   
