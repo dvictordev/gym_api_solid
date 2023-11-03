@@ -9,6 +9,7 @@ import { getDistanceBetweenCoordinates } from "@/utils/get-distance-between-coor
 import { Decimal } from "@prisma/client/runtime/library";
 import { MaxDistanceError } from "./errors/max-distance-error";
 import { InvalidDateError } from "./errors/date-invalid-error";
+import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error";
 
 interface CheckInUseCaseRequest {
   userId: string;
@@ -65,7 +66,7 @@ export class CheckInUseCase {
       );
 
     if (checkInOnSameDate) {
-      throw new InvalidDateError();
+      throw new MaxNumberOfCheckInsError();
     }
 
     const checkin = await this.checkinRepositoryInteface.create({

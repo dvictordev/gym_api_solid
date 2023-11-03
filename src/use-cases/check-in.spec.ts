@@ -3,8 +3,8 @@ import { InMemoryCheckInsRepository } from "@/repositories/in-memory/in-memory-c
 import { CheckInUseCase } from "./check-in";
 import { GymUseCase } from "./gym";
 import { InMemoryGymRepository } from "@/repositories/in-memory/in-memory-gym-repository";
-import { InvalidDateError } from "./errors/date-invalid-error";
 import { MaxDistanceError } from "./errors/max-distance-error";
+import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error";
 
 let inMemoryCheckInsRepository: InMemoryCheckInsRepository;
 let checkInUseCase: CheckInUseCase;
@@ -70,10 +70,10 @@ describe("Check-in Use Case", () => {
         latitude: -29.9881335,
         longitude: -52.3719842,
       })
-    ).rejects.toBeInstanceOf(InvalidDateError);
+    ).rejects.toBeInstanceOf(MaxNumberOfCheckInsError);
   });
 
-  it("should  be able to checkin twice but in different days", async () => {
+  it("should be able to checkin twice but in different days", async () => {
     vi.setSystemTime(new Date(2023, 0, 20, 8, 0, 0));
 
     await checkInUseCase.execute({
