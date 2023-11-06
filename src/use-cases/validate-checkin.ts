@@ -10,6 +10,8 @@ import { Decimal } from "@prisma/client/runtime/library";
 import { MaxDistanceError } from "./errors/max-distance-error";
 import { InvalidDateError } from "./errors/date-invalid-error";
 import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error";
+import dayjs from "dayjs";
+import { LateCheckinValidationError } from "./errors/late-checkin-validation-error";
 
 interface ValidateCheckInUseCaseRequest {
   checkInId: string;
@@ -29,6 +31,15 @@ export class ValidateCheckInUseCase {
 
     if (!checkin) {
       throw new ResourceNotFoundError();
+    }
+
+    const distancInMinutesFromCheckinCreation = dayjs(new Date()).diff(
+      checkin.created_at,
+      "minutes"
+    );
+
+    if (distancInMinutesFromCheckinCreation > 20) {
+      throw new LateCheckinValidationError();
     }
     checkin.validated_at = new Date();
 
