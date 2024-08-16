@@ -30,7 +30,7 @@ describe("Get User Profile Use Case", () => {
   it("should not find a user profile", async () => {
     await expect(() =>
       getUserProfileUseCase.execute({
-        userId: "",
+        userId: "non-existing-id",
       })
     ).rejects.toBeInstanceOf(ResourceNotFoundError);
   });

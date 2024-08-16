@@ -21,6 +21,7 @@ describe("Check-in Use Case", () => {
     );
 
     gymRepository.create({
+      id: "gym-01",
       description: "description TESTE",
       latitude: -29.9881335,
       longitude: -52.3719842,
@@ -36,9 +37,6 @@ describe("Check-in Use Case", () => {
   /* --------- fake times ----------- 
   -29.9881335,-52.3719842
   -30.192668,-52.3717986
-
-  
-  olá {{nome_usuario}}, me chamo {{nome_atendente}} e sou do setor comercial da empresa {{nome_empresa}}. verifiquei que já temos atendimento com fibra óptica no seu endereço, gostaria de fazer a migração?
   
   */
 

@@ -3,6 +3,7 @@ import { Gym, Prisma } from "@prisma/client";
 import { FindManyNearGyms, GymRepositoryInterface } from "../gym-repository";
 import { Decimal } from "@prisma/client/runtime/library";
 import { getDistanceBetweenCoordinates } from "@/utils/get-distance-between-coordinates";
+import { randomUUID } from "crypto";
 
 export class InMemoryGymRepository implements GymRepositoryInterface {
   public items: Gym[] = [];
@@ -27,7 +28,7 @@ export class InMemoryGymRepository implements GymRepositoryInterface {
 
   async create(data: Prisma.GymCreateInput) {
     const gym: Gym = {
-      id: data.id ?? "gym-01",
+      id: data.id ?? randomUUID(),
       description: data.description ?? null,
       latitude: new Decimal(data.latitude.toString()),
       longitude: new Decimal(data.longitude.toString()),
