@@ -9,7 +9,7 @@ export async function createCheckiController(
   reply: FastifyReply
 ) {
   const createCheckInParamsSchema = z.object({
-    gymId: z.string().uuid(),
+    gymId: z.string().cuid(),
   });
 
   const createCheckinBodySchema = z.object({
@@ -17,7 +17,7 @@ export async function createCheckiController(
       return Math.abs(value) <= 90;
     }),
     longitude: z.number().refine((value) => {
-      return Math.abs(value) <= 1;
+      return Math.abs(value) <= 180;
     }),
   });
 
