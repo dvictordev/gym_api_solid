@@ -14,7 +14,6 @@ export async function registerController(
   });
 
   const { name, email, password } = registerBodySchema.parse(request.body);
-  console.log(name, email, password);
 
   try {
     const registerUseCase = makeRegisterUseCase();
