@@ -4,7 +4,7 @@ import { createAndAuthenticateUser } from "@/utils/create-and-authenticate-user"
 import request from "supertest";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-describe("Create Checkin (e2e)", async () => {
+describe("Checkin metrics (e2e)", async () => {
   beforeAll(async () => {
     await app.ready();
   });
@@ -13,8 +13,10 @@ describe("Create Checkin (e2e)", async () => {
     await app.close();
   });
 
-  it("should be able to create a checkin", async () => {
+  it("should be able to get the total count of checkins", async () => {
     const { token } = await createAndAuthenticateUser(app);
+
+    const user = await prisma.user.findFirstOrThrow();
 
     const gym = await prisma.gym.create({
       data: {
@@ -25,14 +27,25 @@ describe("Create Checkin (e2e)", async () => {
       },
     });
 
-    const response = await request(app.server)
-      .post(`/gyms/${gym.id}/check-ins`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({
-        latitude: -27.2092052,
-        longitude: -49.6401091,
-      });
+    await prisma.checkin.createMany({
+      data: [
+        {
+          gym_id: gym.id,
+          user_id: user.id,
+        },
+        {
+          gym_id: gym.id,
+          user_id: user.id,
+        },
+      ],
+    });
 
-    expect(response.statusCode).toEqual(201);
+    const response = await request(app.server)
+      .get("/check-ins/metrics")
+      .set("Authorization", `Bearer ${token}`)
+      .send();
+
+    expect(response.statusCode).toEqual(200);
+    expect(response.body.checkInsCount).toEqual(2);
   });
 });
